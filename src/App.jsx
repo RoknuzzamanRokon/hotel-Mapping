@@ -7,7 +7,6 @@ import {
   Card,
   Form,
   Button,
-  InputGroup,
   ProgressBar,
   Table,
   Modal,
@@ -20,7 +19,7 @@ import {
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { pushHotels, getHotelDetails } from "./api";
-import RoomTypesTab from "./RoomTypesTab";
+import RoomTypesTab from "./components/RoomTypesTab";
 
 
 export default function App() {
@@ -29,7 +28,6 @@ export default function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [debugInfo, setDebugInfo] = useState(null);
 
   const [checkSupplier, setCheckSupplier] = useState("hotelbeds");
   const [checkHotelId, setCheckHotelId] = useState("");
@@ -49,7 +47,20 @@ export default function App() {
     { id: "tbohotel", name: "TBO Hotels" },
     { id: "agoda", name: "Agoda" },
     { id: "ean", name: "Expedia" },
-    { id: "booking", name: "Booking.com" },
+    { id: "grnconnect", name: "GRN Connect" },
+    { id: "restel", name: "Restel" },
+    { id: "dotw", name: "DOTW" },
+    { id: "paximum", name: "Paximum" },
+    { id: "amadeushotel", name: "Amadeus Hotel" },
+    { id: "goglobal", name: "GoGlobal" },
+    { id: "hotelston", name: "Hotelston" },
+    { id: "hyperguestdirect", name: "HyperGuest Direct" },
+    { id: "illusionshotel", name: "Illusions Hotel" },
+    { id: "innstant", name: "Innstant" },
+    { id: "irixhotel", name: "Irix Hotel" },
+    { id: "juniperhotel", name: "Juniper Hotel" },
+    { id: "letsflyhotel", name: "LetsFly Hotel" },
+    { id: "rakuten", name: "Rakuten" },
   ];
 
   const parseHotelInput = (text) =>
@@ -65,7 +76,6 @@ export default function App() {
     if (!ids.length) return setError("Please enter at least one hotel ID.");
     setError(null);
     setLoading(true);
-    setDebugInfo(null);
 
     try {
       // Log what we're sending to the API
@@ -75,24 +85,14 @@ export default function App() {
       };
 
       console.log("Sending to API:", requestData);
-      setDebugInfo({ request: requestData });
 
       const data = await pushHotels(supplier, ids);
+
+      // Process the API response
       setResults(data?.results ?? data ?? []);
-      setDebugInfo((prev) => ({ ...prev, response: data }));
     } catch (err) {
       console.error("API Error details:", err.response || err);
       setError(`Failed to process request: ${err.message}`);
-      setDebugInfo((prev) => ({
-        ...prev,
-        error: err.response
-          ? {
-              status: err.response.status,
-              data: err.response.data,
-              headers: err.response.headers,
-            }
-          : err.message,
-      }));
     } finally {
       setLoading(false);
     }
@@ -115,7 +115,6 @@ export default function App() {
     setHotelIds("");
     setResults([]);
     setError(null);
-    setDebugInfo(null);
   };
 
   // Quick single-check
@@ -175,7 +174,8 @@ export default function App() {
   const failedCount = results.filter((r) => r.status === "failed").length;
   const progressPercent = total ? Math.round((successCount / total) * 100) : 0;
 
-  return (
+    return (
+      <div className="d-flex flex-column min-vh-100">
     <Container className="py-4">
       <header className="d-flex justify-content-between align-items-start mb-3">
         <div>
@@ -671,6 +671,10 @@ export default function App() {
                 </Row>
               </Tab>
 
+              <Tab eventKey="room" title="Room">
+                <RoomTypesTab roomTypes={hotelDetails.room_type || []} />
+              </Tab>
+
               {/* Images (uses hotel_photo array) */}
               <Tab eventKey="images" title="Images">
                 <Row className="mt-3">
@@ -827,11 +831,8 @@ export default function App() {
                       </ListGroup.Item>
                     </ListGroup>
                   </Col>
-                                      </Row>
-                                      
+                </Row>
               </Tab>
-
-
 
               <Tab eventKey="contact" title="Contact">
                 <Row className="mt-3">
@@ -938,9 +939,16 @@ export default function App() {
         </Modal.Footer>
       </Modal>
 
-      <footer className="text-center text-muted mt-4">
+
+
+    </Container>
+              <footer className="text-center text-muted mt-auto py-3 bg-light">
         <small>© {new Date().getFullYear()} Hotel Mapping API</small>
       </footer>
-    </Container>
+        
+         </div>
   );
 }
+
+
+
