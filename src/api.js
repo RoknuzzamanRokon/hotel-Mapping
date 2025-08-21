@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:7770/hotel/pushhotel";
-// const API_URL = "https://mappingapi.innsightmap.com/hotel/pushhotel";
+// const API_URL = "http://127.0.0.1:7770/hotel/pushhotel";
+const API_URL = "https://mappingapi.innsightmap.com/hotel/pushhotel";
 
 export const pushHotels = async (supplier_code, hotel_ids) => {
   try {
@@ -23,36 +23,11 @@ export const pushHotels = async (supplier_code, hotel_ids) => {
 };
 
 
-// src/api.js
-export const getHotelDetails = async (supplier_code, hotel_id) => {
-  try {
-    const response = await axios.post(
-      "http://127.0.0.1:7770/hotel/details",
-      {
-        supplier_code,
-        hotel_id,
-      },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Hotel Details Error:', error);
-    throw error;
-  }
-};
-
-
-
-
-
-
 // // src/api.js
 // export const getHotelDetails = async (supplier_code, hotel_id) => {
 //   try {
 //     const response = await axios.post(
-//       "https://mappingapi.innsightmap.com/hotel/details",
+//       "http://127.0.0.1:7770/hotel/details",
 //       {
 //         supplier_code,
 //         hotel_id,
@@ -67,3 +42,28 @@ export const getHotelDetails = async (supplier_code, hotel_id) => {
 //     throw error;
 //   }
 // };
+
+
+
+
+
+
+// src/api.js
+export const getHotelDetails = async (supplier_code, hotel_id) => {
+  try {
+    const response = await axios.post(
+      "https://mappingapi.innsightmap.com/hotel/details",
+      {
+        supplier_code,
+        hotel_id,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Hotel Details Error:', error);
+    throw error;
+  }
+};

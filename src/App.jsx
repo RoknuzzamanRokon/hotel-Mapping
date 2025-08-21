@@ -68,7 +68,27 @@ export default function App() {
     { id: "juniperhotel", name: "Juniper Hotel" },
     { id: "letsflyhotel", name: "LetsFly Hotel" },
     { id: "rakuten", name: "Rakuten" },
+    { id: "roomerang", name: "RoomeRang" },
+    { id: "stuba", name: "Stuba" },
   ];
+
+
+  //   const supplierOptionsCollectData = [
+  //   { id: "hotelbeds", name: "Hotelbeds" },
+  //   { id: "tbohotel", name: "TBO Hotels" },
+  //   { id: "agoda", name: "Agoda" },
+  //   { id: "ean", name: "Expedia" },
+  //   { id: "grnconnect", name: "GRN Connect" },
+  //   { id: "restel", name: "Restel" },
+  //   { id: "dotw", name: "DOTW" },
+  //   { id: "paximum", name: "Paximum" },
+  //   { id: "amadeushotel", name: "Amadeus Hotel" },
+  //   { id: "goglobal", name: "GoGlobal" },
+  //   { id: "hyperguestdirect", name: "HyperGuest Direct" },
+  //   { id: "innstant", name: "Innstant" },
+  //   { id: "rakuten", name: "Rakuten" },
+  // ];
+
 
   const parseHotelInput = (text) =>
     (text || "")
@@ -787,7 +807,7 @@ export default function App() {
                 Hotel Mapping System
               </h5>
               <small className="text-muted">
-                Streamlined hotel management across multiple suppliers. 
+                Streamlined hotel management across multiple suppliers.
               </small>
             </Col>
             <Col md={6} className="text-md-end mt-2 mt-md-0">
