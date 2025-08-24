@@ -51,6 +51,7 @@ export default function App() {
 
   const supplierOptions = [
     { id: "hotelbeds", name: "Hotelbeds" },
+    { id: "ratehawkhotel", name: "RateHawk Hotel" },
     { id: "tbohotel", name: "TBO Hotels" },
     { id: "agoda", name: "Agoda" },
     { id: "ean", name: "Expedia" },
@@ -73,21 +74,21 @@ export default function App() {
   ];
 
 
-  //   const supplierOptionsCollectData = [
-  //   { id: "hotelbeds", name: "Hotelbeds" },
-  //   { id: "tbohotel", name: "TBO Hotels" },
-  //   { id: "agoda", name: "Agoda" },
-  //   { id: "ean", name: "Expedia" },
-  //   { id: "grnconnect", name: "GRN Connect" },
-  //   { id: "restel", name: "Restel" },
-  //   { id: "dotw", name: "DOTW" },
-  //   { id: "paximum", name: "Paximum" },
-  //   { id: "amadeushotel", name: "Amadeus Hotel" },
-  //   { id: "goglobal", name: "GoGlobal" },
-  //   { id: "hyperguestdirect", name: "HyperGuest Direct" },
-  //   { id: "innstant", name: "Innstant" },
-  //   { id: "rakuten", name: "Rakuten" },
-  // ];
+    const supplierOptionsCollectData = [
+    { id: "hotelbeds", name: "Hotelbeds" },
+    { id: "tbohotel", name: "TBO Hotels" },
+    { id: "agoda", name: "Agoda" },
+    { id: "ean", name: "Expedia" },
+    { id: "grnconnect", name: "GRN Connect" },
+    { id: "restel", name: "Restel" },
+    { id: "dotw", name: "DOTW" },
+    { id: "paximum", name: "Paximum" },
+    { id: "amadeushotel", name: "Amadeus Hotel" },
+    { id: "goglobal", name: "GoGlobal" },
+    { id: "hyperguestdirect", name: "HyperGuest Direct" },
+    { id: "innstant", name: "Innstant" },
+    { id: "rakuten", name: "Rakuten" },
+  ];
 
 
   const parseHotelInput = (text) =>
@@ -462,7 +463,7 @@ export default function App() {
                           onChange={(e) => setSupplier(e.target.value)}
                           size="sm"
                         >
-                          {supplierOptions.map((s) => (
+                          {supplierOptionsCollectData.map((s) => (
                             <option key={s.id} value={s.id}>
                               {s.name}
                             </option>
@@ -744,7 +745,11 @@ export default function App() {
                   </Button>
                   <Button
                     variant="outline-info"
-                    onClick={() => setHotelIds("754387,133836,23418915,164")}
+                    onClick={() =>
+                      setHotelIds(
+                        "754387,1000000,1,10,107998271,72131156,1816570,1688523,C13315,C14072,27184,67704,339898,439769,AIDXBANI,AKBAHMGA,17804"
+                      )
+                    }
                     size="sm"
                   >
                     <i className="fas fa-download me-2"></i> Load Demo IDs
