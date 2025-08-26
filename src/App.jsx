@@ -29,6 +29,7 @@ export default function App() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
   const timerRef = useRef(null);
+  const MAX_HOTEL_IDS = 500;
 
   const [checkSupplier, setCheckSupplier] = useState("hotelbeds");
   const [checkHotelId, setCheckHotelId] = useState("");
@@ -47,7 +48,6 @@ export default function App() {
   const intervalRef = useRef(null);
 
   const textRef = useRef(null);
-
 
   const supplierOptions = [
     { id: "hotelbeds", name: "Hotelbeds" },
@@ -74,24 +74,22 @@ export default function App() {
     { id: "ratehawk_new", name: "RateHawk New" },
   ];
 
-
-    const supplierOptionsCollectData = [
-      { id: "hotelbeds", name: "Hotelbeds" },
-      { id: "tbohotel", name: "TBO Hotels" },
-      { id: "agoda", name: "Agoda" },
-      { id: "ean", name: "Expedia" },
-      { id: "grnconnect", name: "GRN Connect" },
-      { id: "restel", name: "Restel" },
-      { id: "dotw", name: "DOTW" },
-      { id: "paximum", name: "Paximum" },
-      { id: "amadeushotel", name: "Amadeus Hotel" },
-      { id: "goglobal", name: "GoGlobal" },
-      { id: "hyperguestdirect", name: "HyperGuest Direct" },
-      { id: "innstant", name: "Innstant" },
-      { id: "rakuten", name: "Rakuten" },
-      { id: "ratehawk_new", name: "RateHawk New" },
-    ];
-
+  const supplierOptionsCollectData = [
+    { id: "hotelbeds", name: "Hotelbeds" },
+    { id: "tbohotel", name: "TBO Hotels" },
+    { id: "agoda", name: "Agoda" },
+    { id: "ean", name: "Expedia" },
+    { id: "grnconnect", name: "GRN Connect" },
+    { id: "restel", name: "Restel" },
+    { id: "dotw", name: "DOTW" },
+    { id: "paximum", name: "Paximum" },
+    { id: "amadeushotel", name: "Amadeus Hotel" },
+    { id: "goglobal", name: "GoGlobal" },
+    { id: "hyperguestdirect", name: "HyperGuest Direct" },
+    { id: "innstant", name: "Innstant" },
+    { id: "rakuten", name: "Rakuten" },
+    { id: "ratehawk_new", name: "RateHawk New" },
+  ];
 
   const parseHotelInput = (text) =>
     (text || "")
@@ -188,9 +186,6 @@ export default function App() {
     };
   }, []);
 
-
-
-
   // Quick single-check
   const handleTopCheckAvailability = async () => {
     if (!checkHotelId.trim()) return;
@@ -233,10 +228,8 @@ export default function App() {
       const text = String(ev.target.result);
       const ids = parseHotelInput(
         text.replace(/\r/g, "\n").replace(/,+/g, ",")
-      );
-      setHotelIds((prev) =>
-        prev ? prev + "\n" + ids.join(",") : ids.join(",")
-      );
+      ).slice(0, MAX_HOTEL_IDS);
+      setHotelIds(ids.join(","));
     };
     reader.readAsText(file);
   };
@@ -544,7 +537,13 @@ export default function App() {
                       rows={6}
                       ref={textRef}
                       value={hotelIds}
-                      onChange={(e) => setHotelIds(e.target.value)}
+                      onChange={(e) => {
+                        const ids = parseHotelInput(e.target.value).slice(
+                          0,
+                          MAX_HOTEL_IDS
+                        );
+                        setHotelIds(ids.join(","));
+                      }}
                       placeholder="12345,67890  or  12345\n67890"
                       style={{ fontFamily: "monospace" }}
                       className="border-0 bg-light"
@@ -553,6 +552,13 @@ export default function App() {
                       <i className="fas fa-lightbulb me-1"></i>
                       Tip: Use Ctrl/Cmd + Enter to submit.
                     </div>
+                    {parseHotelInput(hotelIds).length >= MAX_HOTEL_IDS && (
+                      <div className="text-danger small mt-1">
+                        <i className="fas fa-exclamation-triangle me-1"></i>
+                        Maximum 500 hotel IDs allowed. Only the first 500 will
+                        be used.
+                      </div>
+                    )}
                   </Form.Group>
 
                   {error && (
