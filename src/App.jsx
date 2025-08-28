@@ -59,7 +59,7 @@ export default function App() {
     { id: "restel", name: "Restel" },
     { id: "dotw", name: "DOTW" },
     { id: "paximum", name: "Paximum" },
-    { id: "amadeushotel", name: "Amadeus Hotel" },
+    // { id: "amadeushotel", name: "Amadeus Hotel" },
     { id: "goglobal", name: "GoGlobal" },
     { id: "hotelston", name: "Hotelston" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
@@ -83,11 +83,11 @@ export default function App() {
     { id: "restel", name: "Restel" },
     { id: "dotw", name: "DOTW" },
     { id: "paximum", name: "Paximum" },
-    { id: "amadeushotel", name: "Amadeus Hotel" },
-    { id: "goglobal", name: "GoGlobal" },
+    // { id: "amadeushotel", name: "Amadeus Hotel" },
+    // { id: "goglobal", name: "GoGlobal" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
     { id: "innstant", name: "Innstant" },
-    { id: "rakuten", name: "Rakuten" },
+    // { id: "rakuten", name: "Rakuten" },
     { id: "ratehawk_new", name: "RateHawk New" },
   ];
 
