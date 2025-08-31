@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import App from "./App";
 import Login from "./components/Login";
 
-const AppWithAuth = () => {
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Check if user is already logged in on component mount
   useEffect(() => {
     const checkLoginStatus = () => {
       const loginStatus = localStorage.getItem("isLoggedIn");
@@ -22,10 +29,12 @@ const AppWithAuth = () => {
 
         if (now - loginTimestamp < twentyFourHours) {
           setIsLoggedIn(true);
-          setUsername(storedUsername);
         } else {
           // Login expired, clear storage
-          handleLogout();
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("loginTime");
+          localStorage.removeItem("username");
+          setIsLoggedIn(false);
         }
       }
       setLoading(false);
@@ -34,24 +43,6 @@ const AppWithAuth = () => {
     checkLoginStatus();
   }, []);
 
-  const handleLoginSuccess = () => {
-    const storedUsername = localStorage.getItem("username");
-    setIsLoggedIn(true);
-    setUsername(storedUsername || "User");
-  };
-
-  const handleLogout = () => {
-    // Clear all login data from localStorage
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("loginTime");
-    localStorage.removeItem("username");
-
-    // Update state
-    setIsLoggedIn(false);
-    setUsername("");
-  };
-
-  // Show loading spinner while checking authentication
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center min-vh-100">
@@ -65,13 +56,85 @@ const AppWithAuth = () => {
     );
   }
 
-  // Show Login component if not logged in
-  if (!isLoggedIn) {
-    return <Login onLoginSuccess={handleLoginSuccess} />;
-  }
+  return isLoggedIn ? children : <Navigate to="/" replace />;
+};
 
-  // Show main App with logout functionality if logged in
+// Login Page Component
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if already logged in
+  useEffect(() => {
+    const loginStatus = localStorage.getItem("isLoggedIn");
+    const loginTime = localStorage.getItem("loginTime");
+
+    if (loginStatus === "true" && loginTime) {
+      const now = Date.now();
+      const loginTimestamp = parseInt(loginTime);
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+
+      if (now - loginTimestamp < twentyFourHours) {
+        // Already logged in, redirect to main
+        navigate("/main", { replace: true });
+      }
+    }
+  }, [navigate]);
+
+  const handleLoginSuccess = () => {
+    // Redirect to main page after successful login
+    const from = location.state?.from?.pathname || "/main";
+    navigate(from, { replace: true });
+  };
+
+  return <Login onLoginSuccess={handleLoginSuccess} />;
+};
+
+// Main Dashboard Component
+const MainPage = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    setUsername(storedUsername || "User");
+  }, []);
+
+  const handleLogout = () => {
+    // Clear all login data from localStorage
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("loginTime");
+    localStorage.removeItem("username");
+
+    // Redirect to login page
+    navigate("/", { replace: true });
+  };
+
   return <App onLogout={handleLogout} username={username} />;
+};
+
+const AppWithAuth = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* Login Route - Root path */}
+        <Route path="/" element={<LoginPage />} />
+
+        {/* Main Dashboard Route - Protected */}
+        <Route
+          path="/main"
+          element={
+            <ProtectedRoute>
+              <MainPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Redirect any other routes to login */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default AppWithAuth;
