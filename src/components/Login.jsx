@@ -16,7 +16,7 @@ const Login = ({ onLoginSuccess }) => {
 
     try {
       const response = await fetch(
-        "http://109.123.238.118:8000/v1.0/auth/token/",
+        "https://hotelmapping.innovatedemo.com/api/v1.0/auth/token/",
         {
           method: "POST",
           headers: {
