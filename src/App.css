@@ -1,0 +1,47 @@
+/* Sticky Tabs Navigation */
+.sticky-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sticky-tabs .nav-tabs {
+  background-color: white;
+  margin-bottom: 0;
+}
+
+.sticky-tabs .nav-tabs .nav-link {
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.sticky-tabs .nav-tabs .nav-link:hover {
+  border-color: #e9ecef #e9ecef #dee2e6;
+  background-color: #f8f9fa;
+}
+
+.sticky-tabs .nav-tabs .nav-link.active {
+  background-color: white;
+  border-color: #dee2e6 #dee2e6 white;
+  border-bottom-color: white;
+}
+
+/* Add some padding to the tab content to prevent content from hiding behind sticky tabs */
+.sticky-tabs + .tab-content {
+  padding-top: 1rem;
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Add a subtle animation when tabs become sticky */
+@media (prefers-reduced-motion: no-preference) {
+  .sticky-tabs {
+    transition: box-shadow 0.2s ease;
+  }
+}

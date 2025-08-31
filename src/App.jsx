@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Container,
   Row,
@@ -17,19 +17,18 @@ import {
   Tab,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import { pushHotels, getHotelDetails } from "./api";
 import RoomTypesTab from "./components/RoomTypesTab";
 
-export default function App() {
+export default function App({ onLogout, username }) {
   const [supplier, setSupplier] = useState("hotelbeds");
   const [hotelIds, setHotelIds] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [timerActive, setTimerActive] = useState(false);
-  const timerRef = useRef(null);
-  const MAX_HOTEL_IDS = 500;
+
+  const MAX_HOTEL_IDS = 300;
 
   const [checkSupplier, setCheckSupplier] = useState("hotelbeds");
   const [checkHotelId, setCheckHotelId] = useState("");
@@ -133,7 +132,7 @@ export default function App() {
   };
 
   // SUBMIT bulk
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e?.preventDefault?.();
     const ids = parseHotelInput(hotelIds);
     if (!ids.length) return setError("Please enter at least one hotel ID.");
@@ -164,7 +163,7 @@ export default function App() {
       // stop timer when processing finishes
       stopTimer();
     }
-  };
+  });
 
   // Ctrl/Cmd + Enter to submit from textarea
   useEffect(() => {
@@ -177,7 +176,7 @@ export default function App() {
     };
     el.addEventListener("keydown", handler);
     return () => el.removeEventListener("keydown", handler);
-  }, [supplier, hotelIds]);
+  }, [supplier, hotelIds, handleSubmit]);
 
   // cleanup timer on unmount
   useEffect(() => {
@@ -255,7 +254,7 @@ export default function App() {
       style={{ backgroundColor: "#f8f9fa" }}
     >
       {/* Header */}
-      <header className="bg-white shadow-sm py-3">
+      <header className="bg-white shadow-sm py-3 sticky-tabs">
         <Container>
           <Row className="align-items-center">
             <Col>
@@ -263,14 +262,28 @@ export default function App() {
                 <i className="fas fa-hotel me-2"></i>
                 Hotel Mapping Dashboard
               </h3>
-              <small className="text-muted">
-                Manage hotel IDs across multiple suppliers
-              </small>
             </Col>
-            <Col xs="auto">
-              <Badge bg="light" text="dark" className="fs-6">
+            <Col xs="auto" className="d-flex align-items-center gap-2">
+              {/* <Badge bg="light" text="dark" className="fs-6">
                 v2.0
-              </Badge>
+              </Badge> */}
+              {username && (
+                <div className="d-flex align-items-center text-muted me-2">
+                  <i className="fas fa-user me-1"></i>
+                  <span className="fw-medium">{username}</span>
+                </div>
+              )}
+              {onLogout && (
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={onLogout}
+                  className="d-flex align-items-center"
+                >
+                  <i className="fas fa-sign-out-alt me-1"></i>
+                  Logout
+                </Button>
+              )}
             </Col>
           </Row>
         </Container>
@@ -377,8 +390,7 @@ export default function App() {
                           </h6>
                           <div className="text-muted small">
                             <i className="fas fa-map-marker-alt me-1"></i>
-                            {checkResult.address?.city},{" "}
-                            {checkResult.address?.country}
+                            {checkResult.address?.full_address}
                           </div>
                         </div>
 
@@ -439,7 +451,7 @@ export default function App() {
                     <i className="fas fa-bolt text-white"></i>
                   </div>
                   <div>
-                    <h5 className="mb-0">Bulk Hotel Processing</h5>
+                    <h5 className="mb-0">Bulk Hotel Push Processing Section</h5>
                     <small className="text-muted">
                       Process multiple hotel IDs at once
                     </small>
@@ -492,14 +504,14 @@ export default function App() {
                               className="me-2"
                             />
                             Processing...
-                            {timerActive && (
+                            {/* {timerRunning && (
                               <span
                                 className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
                                 style={{ fontSize: "0.6rem" }}
                               >
-                                {formatTime(elapsedTime)}
+                                {formatTime(Math.floor(elapsedMs / 1000))}
                               </span>
-                            )}
+                            )} */}
                           </>
                         ) : (
                           <>
@@ -555,7 +567,7 @@ export default function App() {
                     {parseHotelInput(hotelIds).length >= MAX_HOTEL_IDS && (
                       <div className="text-danger small mt-1">
                         <i className="fas fa-exclamation-triangle me-1"></i>
-                        Maximum 500 hotel IDs allowed. Only the first 500 will
+                        Maximum 300 hotel IDs allowed. Only the first 500 will
                         be used.
                       </div>
                     )}
@@ -819,9 +831,6 @@ export default function App() {
                 <i className="fas fa-hotel me-2"></i>
                 Hotel Mapping System
               </h5>
-              <small className="text-muted">
-                Streamlined hotel management across multiple suppliers.
-              </small>
             </Col>
             <Col md={6} className="text-md-end mt-2 mt-md-0">
               <small>
@@ -859,7 +868,7 @@ export default function App() {
               {errorDetails}
             </Alert>
           ) : hotelDetails ? (
-            <Tabs defaultActiveKey="overview" className="mb-0">
+            <Tabs defaultActiveKey="overview" className="mb-0 sticky-tabs">
               <Tab
                 eventKey="overview"
                 title={
@@ -917,16 +926,27 @@ export default function App() {
                           <ListGroup.Item className="d-flex justify-content-between">
                             <span className="fw-medium">Star Rating:</span>
                             <div>
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <i
-                                  key={i}
-                                  className={`fas fa-star${
-                                    i < hotelDetails.star_rating
-                                      ? " text-warning"
-                                      : " text-muted"
-                                  }`}
-                                ></i>
-                              ))}
+                              {hotelDetails.star_rating ? (
+                                <>
+                                  {Array.from({ length: 5 }).map((_, i) => (
+                                    <i
+                                      key={i}
+                                      className={`fas fa-star${
+                                        i < parseInt(hotelDetails.star_rating)
+                                          ? " text-warning"
+                                          : " text-muted"
+                                      }`}
+                                    ></i>
+                                  ))}
+                                  <span className="ms-2 small text-muted">
+                                    ({hotelDetails.star_rating}★)
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="text-muted">
+                                  Not available
+                                </span>
+                              )}
                             </div>
                           </ListGroup.Item>
                           <ListGroup.Item className="d-flex justify-content-between">
@@ -1539,6 +1559,149 @@ export default function App() {
                             </ListGroup>
                           ) : (
                             <div className="text-muted">N/A</div>
+                          )}
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
+                </div>
+              </Tab>
+
+              <Tab
+                eventKey="map"
+                title={
+                  <>
+                    <i className="fas fa-map-marker-alt me-1"></i> Map
+                  </>
+                }
+              >
+                <div className="p-4">
+                  <Row>
+                    <Col>
+                      <Card className="shadow-sm border-0">
+                        <Card.Header className="bg-primary text-white">
+                          <h6 className="mb-0">
+                            <i className="fas fa-map me-1"></i> Hotel Location
+                          </h6>
+                        </Card.Header>
+                        <Card.Body>
+                          {(hotelDetails.address?.full_address ||
+                            hotelDetails.full_address) && (
+                            <div className="mb-3">
+                              <div className="fw-medium mb-2">
+                                <i className="fas fa-map-marker-alt me-2 text-primary"></i>
+                                Full Address:
+                              </div>
+                              <p className="text-muted mb-0">
+                                {hotelDetails.address?.full_address ||
+                                  hotelDetails.full_address}
+                              </p>
+                            </div>
+                          )}
+
+                          {hotelDetails.address?.google_map_site_link ||
+                          hotelDetails.google_map_site_link ||
+                          hotelDetails.address?.full_address ||
+                          hotelDetails.full_address ? (
+                            <div className="text-center">
+                              {(hotelDetails.address?.google_map_site_link ||
+                                hotelDetails.google_map_site_link) && (
+                                <a
+                                  href={
+                                    hotelDetails.address
+                                      ?.google_map_site_link ||
+                                    hotelDetails.google_map_site_link
+                                  }
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-primary btn-lg mb-3"
+                                >
+                                  <i className="fas fa-external-link-alt me-2"></i>
+                                  View on Google Maps
+                                </a>
+                              )}
+
+                              {(hotelDetails.address?.full_address ||
+                                hotelDetails.full_address) && (
+                                <div className="mt-3">
+                                  <iframe
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                                      hotelDetails.address?.full_address ||
+                                        hotelDetails.full_address
+                                    )}&output=embed`}
+                                    width="100%"
+                                    height="400"
+                                    style={{ border: 0, borderRadius: "8px" }}
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    title="Hotel Location Map"
+                                  ></iframe>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="text-center text-muted py-4">
+                              <i className="fas fa-map-marker-alt fa-3x mb-3 d-block"></i>
+                              <p>
+                                Map information not available for this hotel.
+                              </p>
+
+                              {/* Debug Information */}
+                              <div className="mt-3 p-3 bg-light rounded text-start">
+                                <h6 className="text-dark mb-2">
+                                  <i className="fas fa-bug me-1"></i> Debug
+                                  Info:
+                                </h6>
+                                <div className="small">
+                                  <div className="mb-2">
+                                    <strong>Google Map Link:</strong>{" "}
+                                    {hotelDetails.google_map_site_link ? (
+                                      <a
+                                        href={hotelDetails.google_map_site_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary"
+                                      >
+                                        {hotelDetails.google_map_site_link}
+                                      </a>
+                                    ) : (
+                                      <span className="text-danger">
+                                        Not available
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="mb-2">
+                                    <strong>Full Address:</strong>{" "}
+                                    {hotelDetails.full_address ? (
+                                      <span className="text-success">
+                                        {hotelDetails.full_address}
+                                      </span>
+                                    ) : (
+                                      <span className="text-danger">
+                                        Not available
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <strong>Address Object:</strong>{" "}
+                                    {hotelDetails.address ? (
+                                      <span className="text-info">
+                                        {JSON.stringify(
+                                          hotelDetails.address,
+                                          null,
+                                          2
+                                        )}
+                                      </span>
+                                    ) : (
+                                      <span className="text-danger">
+                                        Not available
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           )}
                         </Card.Body>
                       </Card>
