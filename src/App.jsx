@@ -196,7 +196,7 @@ export default function App({ onLogout, username }) {
       setCheckResult(data);
     } catch (err) {
       console.error(err);
-      setCheckError(`Hotel not found or API error: ${err.message}`);
+      setCheckError(`Hotel not found`);
     } finally {
       setCheckLoading(false);
     }
