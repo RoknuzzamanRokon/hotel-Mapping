@@ -28,16 +28,18 @@ const Login = ({ onLoginSuccess }) => {
         }
       );
 
-      const data = await response.text();
+      const data = await response.json();
 
-      if (response.ok) {
-        // Store login state and username
+      if (response.ok && data.access_token) {
+        localStorage.setItem("accessToken", data.access_token);
+        localStorage.setItem("tokenType", data.token_type || "Bearer");
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("loginTime", Date.now().toString());
         localStorage.setItem("username", username);
+
         onLoginSuccess();
       } else {
-        setError("Invalid username or password");
+        setError("Invalid username or password.");
       }
     } catch (err) {
       setError("Login failed. Please check your connection and try again.");
