@@ -49,45 +49,45 @@ export default function App({ onLogout, username }) {
   const textRef = useRef(null);
 
   const supplierOptions = [
-    { id: "hotelbeds", name: "Hotelbeds" },
     { id: "ratehawkhotel", name: "RateHawk Hotel" },
-    { id: "tbohotel", name: "TBO Hotels" },
+    { id: "ratehawk_new", name: "RateHawk New" },
+    { id: "hotelbeds", name: "Hotelbeds" },
     { id: "agoda", name: "Agoda" },
+    { id: "tbohotel", name: "TBO Hotels" },
     { id: "ean", name: "Expedia" },
     { id: "grnconnect", name: "GRN Connect" },
     { id: "restel", name: "Restel" },
+    { id: "paximum", name: "Paximum" },
+    { id: "juniperhotel", name: "JuniperHotel" },
+    { id: "innstant", name: "Innstant" },
+    { id: "hyperguestdirect", name: "HyperGuest Direct" },
+
     { id: "dotw", name: "DOTW" },
     { id: "paximum", name: "Paximum" },
-    // { id: "amadeushotel", name: "Amadeus Hotel" },
     { id: "goglobal", name: "GoGlobal" },
     { id: "hotelston", name: "Hotelston" },
-    { id: "hyperguestdirect", name: "HyperGuest Direct" },
     { id: "illusionshotel", name: "Illusions Hotel" },
-    { id: "innstant", name: "Innstant" },
     { id: "irixhotel", name: "Irix Hotel" },
-    { id: "juniperhotel", name: "Juniper Hotel" },
     { id: "letsflyhotel", name: "LetsFly Hotel" },
     { id: "rakuten", name: "Rakuten" },
     { id: "roomerang", name: "RoomeRang" },
     { id: "stuba", name: "Stuba" },
-    { id: "ratehawk_new", name: "RateHawk New" },
+    // { id: "amadeushotel", name: "Amadeus Hotel" },
   ];
 
   const supplierOptionsCollectData = [
+    { id: "ratehawk_new", name: "RateHawk New" },
     { id: "hotelbeds", name: "Hotelbeds" },
-    { id: "tbohotel", name: "TBO Hotels" },
     { id: "agoda", name: "Agoda" },
+    { id: "tbohotel", name: "TBO Hotels" },
     { id: "ean", name: "Expedia" },
     { id: "grnconnect", name: "GRN Connect" },
     { id: "restel", name: "Restel" },
-    { id: "dotw", name: "DOTW" },
     { id: "paximum", name: "Paximum" },
-    // { id: "amadeushotel", name: "Amadeus Hotel" },
-    // { id: "goglobal", name: "GoGlobal" },
-    { id: "hyperguestdirect", name: "HyperGuest Direct" },
+    { id: "juniperhotel", name: "JuniperHotel" },
     { id: "innstant", name: "Innstant" },
-    // { id: "rakuten", name: "Rakuten" },
-    { id: "ratehawk_new", name: "RateHawk New" },
+    { id: "hyperguestdirect", name: "HyperGuest Direct" },
+
   ];
 
   const parseHotelInput = (text) =>
