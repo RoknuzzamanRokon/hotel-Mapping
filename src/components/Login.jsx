@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Card, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { Card, Form, Button, Alert, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = ({ onLoginSuccess }) => {
