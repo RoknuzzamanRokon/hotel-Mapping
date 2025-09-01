@@ -88,11 +88,6 @@ function RoomTypesTab({ roomTypes }) {
                             👶 {room.max_allowed?.children || 0} Children
                           </small>
                         </div>
-                        <div>
-                          <small className="text-muted">
-                            🛏️ {room.bed_type?.length || 0} Beds
-                          </small>
-                        </div>
                       </div>
 
                       <Button
@@ -173,13 +168,6 @@ function RoomTypesTab({ roomTypes }) {
                       className="d-flex align-items-center"
                     >
                       📏 {selectedRoom.room_size || "N/A"}
-                    </Badge>
-                    <Badge
-                      bg="light"
-                      text="dark"
-                      className="d-flex align-items-center"
-                    >
-                      🛏️ {selectedRoom.bed_type?.length || 0} Beds
                     </Badge>
                   </div>
                 </Col>

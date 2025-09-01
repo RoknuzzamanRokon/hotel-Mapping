@@ -39,6 +39,8 @@ html {
   scroll-behavior: smooth;
 }
 
+
+
 /* Optional: Add a subtle animation when tabs become sticky */
 @media (prefers-reduced-motion: no-preference) {
   .sticky-tabs {

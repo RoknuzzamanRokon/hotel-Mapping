@@ -851,11 +851,26 @@ export default function App({ onLogout, username }) {
         className="hotel-details-modal"
       >
         <Modal.Header closeButton className="bg-light">
-          <Modal.Title>
-            <i className="fas fa-hotel me-2 text-primary"></i>
-            {hotelDetails?.name || "Hotel Details"}
+          <Modal.Title className="d-flex w-100 justify-content-between align-items-center">
+            <div className="d-flex align-items-center">
+              <i className="fas fa-hotel me-2 text-primary"></i>
+              <span>Hotel Name: {hotelDetails?.name || "N/A"}</span>
+            </div>
+            <div className="ms-auto text-end">
+              {hotelDetails?.created ? (
+                <>
+                  <span style={{ fontSize: "15px", color: "#6c757d" }}>
+                    Date: {hotelDetails.created.split("T")[0]} Time:{" "}
+                    {hotelDetails.created.split("T")[1]}
+                  </span>
+                </>
+              ) : (
+                "Last Update: N/A"
+              )}
+            </div>
           </Modal.Title>
         </Modal.Header>
+
         <Modal.Body className="p-0">
           {loadingDetails ? (
             <div className="text-center py-5">
@@ -1175,8 +1190,15 @@ export default function App({ onLogout, username }) {
               >
                 <div className="p-4">
                   <h5 className="mb-3">
-                    <i className="fas fa-images me-2"></i> Hotel Photos
+                    <i className="fas fa-images me-2"></i> Hotel Photos.
+                    <span
+                      className="ms-3 text-muted"
+                      style={{ fontSize: "0.9rem" }}
+                    >
+                      Total Images: {(hotelDetails.hotel_photo || []).length}
+                    </span>
                   </h5>
+
                   {(hotelDetails.hotel_photo || []).length === 0 ? (
                     <div className="text-center text-muted py-5">
                       <i className="fas fa-image fa-3x mb-3"></i>
