@@ -61,6 +61,7 @@ export default function App({ onLogout, username }) {
     { id: "juniperhotel", name: "JuniperHotel" },
     { id: "innstant", name: "Innstant" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
+    { id: "kiwihotel", name: "kiwihotel" },
 
     { id: "dotw", name: "DOTW" },
     { id: "paximum", name: "Paximum" },
@@ -87,7 +88,7 @@ export default function App({ onLogout, username }) {
     { id: "juniperhotel", name: "JuniperHotel" },
     { id: "innstant", name: "Innstant" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
-
+    { id: "kiwihotel", name: "kiwihotel" },
   ];
 
   const parseHotelInput = (text) =>
