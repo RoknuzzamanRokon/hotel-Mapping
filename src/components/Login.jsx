@@ -16,7 +16,7 @@ const Login = ({ onLoginSuccess }) => {
 
     try {
       const response = await fetch(
-        "https://hotelmapping.innovatedemo.com/api/v1.0/auth/token/",
+        "https://www.testcontent.innovatedemo.com/api/v1.0/auth/token",
         {
           method: "POST",
           headers: {
@@ -37,11 +37,15 @@ const Login = ({ onLoginSuccess }) => {
         localStorage.setItem("loginTime", Date.now().toString());
         localStorage.setItem("username", username);
 
+        console.log("✅ Login successful for", username);
         onLoginSuccess();
-      } else {
+      } else if (response.status === 401) {
         setError("Invalid username or password.");
+      } else {
+        setError(`Login failed with status ${response.status}. Please try again.`);
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError("Login failed. Please check your connection and try again.");
     } finally {
       setLoading(false);
@@ -361,9 +365,8 @@ const Login = ({ onLoginSuccess }) => {
                       title={showPassword ? "Hide password" : "Show password"}
                     >
                       <i
-                        className={`fas ${
-                          showPassword ? "fa-eye-slash" : "fa-eye"
-                        }`}
+                        className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"
+                          }`}
                         style={{ fontSize: "1rem" }}
                       ></i>
                       {/* Fallback text if FontAwesome doesn't load */}
