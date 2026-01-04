@@ -73,6 +73,8 @@ export default function App({ onLogout, username }) {
     { id: "rakuten", name: "Rakuten" },
     { id: "roomerang", name: "RoomeRang" },
     { id: "stuba", name: "Stuba" },
+
+    { id: "rnrhotel", name: "RNR Hotel" },
     // { id: "amadeushotel", name: "Amadeus Hotel" },
   ];
 
@@ -89,6 +91,8 @@ export default function App({ onLogout, username }) {
     { id: "innstant", name: "Innstant" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
     { id: "kiwihotel", name: "kiwihotel" },
+
+    { id: "rnrhotel", name: "RNR Hotel" },
   ];
 
   const parseHotelInput = (text) =>
