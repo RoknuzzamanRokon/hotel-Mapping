@@ -3,8 +3,32 @@ import { Row, Col, Card, Button, Modal, Badge } from "react-bootstrap";
 
 function RoomTypesTab({ roomTypes }) {
   const [selectedRoom, setSelectedRoom] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const noRoomFoundImage =
     "https://hoteljson.innsightmap.com/test1/no_room_picture_found.png";
+
+  const handleSelectRoom = (room) => {
+    setSelectedRoom(room);
+    setCurrentImageIndex(0);
+  };
+
+  const handleNextImage = () => {
+    if (selectedRoom?.additional_images) {
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % selectedRoom.additional_images.length,
+      );
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (selectedRoom?.additional_images) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0
+          ? selectedRoom.additional_images.length - 1
+          : prevIndex - 1,
+      );
+    }
+  };
 
   return (
     <>
@@ -92,7 +116,7 @@ function RoomTypesTab({ roomTypes }) {
 
                       <Button
                         variant="outline-primary"
-                        onClick={() => setSelectedRoom(room)}
+                        onClick={() => handleSelectRoom(room)}
                         className="mt-auto"
                       >
                         View Details
@@ -122,30 +146,94 @@ function RoomTypesTab({ roomTypes }) {
               <Row>
                 <Col md={6}>
                   <div
-                    className="mb-3"
+                    className="mb-3 position-relative"
                     style={{
                       borderRadius: "12px",
                       overflow: "hidden",
                       height: "250px",
                     }}
                   >
-                    <img
-                      src={
-                        selectedRoom.room_pic
-                          ? selectedRoom.room_pic
-                          : noRoomFoundImage
-                      }
-                      alt={selectedRoom.title}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = noRoomFoundImage;
-                      }}
-                    />
+                    {selectedRoom?.additional_images &&
+                    selectedRoom.additional_images.length > 0 ? (
+                      <>
+                        <img
+                          src={
+                            selectedRoom.additional_images[currentImageIndex]
+                              .url
+                          }
+                          alt={`${selectedRoom.title} ${currentImageIndex + 1}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = noRoomFoundImage;
+                          }}
+                        />
+                        {selectedRoom.additional_images.length > 1 && (
+                          <>
+                            <Button
+                              variant="dark"
+                              size="sm"
+                              className="position-absolute"
+                              style={{
+                                left: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                              }}
+                              onClick={handlePrevImage}
+                            >
+                              ❮
+                            </Button>
+                            <Button
+                              variant="dark"
+                              size="sm"
+                              className="position-absolute"
+                              style={{
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                              }}
+                              onClick={handleNextImage}
+                            >
+                              ❯
+                            </Button>
+                            <div
+                              className="position-absolute"
+                              style={{
+                                bottom: "10px",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                backgroundColor: "rgba(0,0,0,0.6)",
+                                color: "white",
+                                padding: "4px 8px",
+                                borderRadius: "4px",
+                                fontSize: "12px",
+                              }}
+                            >
+                              {currentImageIndex + 1} /{" "}
+                              {selectedRoom.additional_images.length}
+                            </div>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <img
+                        src={selectedRoom.room_pic || noRoomFoundImage}
+                        alt={selectedRoom.title}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = noRoomFoundImage;
+                        }}
+                      />
+                    )}
                   </div>
                   <div className="d-flex flex-wrap gap-2 mb-3">
                     <Badge
@@ -199,20 +287,20 @@ function RoomTypesTab({ roomTypes }) {
                         amenity.toLowerCase().includes("shower")
                           ? "🚿 "
                           : amenity.toLowerCase().includes("wifi") ||
-                            amenity.toLowerCase().includes("internet")
-                          ? "📶 "
-                          : amenity.toLowerCase().includes("tv") ||
-                            amenity.toLowerCase().includes("television")
-                          ? "📺 "
-                          : amenity
-                              .toLowerCase()
-                              .includes("air conditioning") ||
-                            amenity.toLowerCase().includes("ac")
-                          ? "❄️ "
-                          : amenity.toLowerCase().includes("dining") ||
-                            amenity.toLowerCase().includes("restaurant")
-                          ? "🍴 "
-                          : "✅ "}
+                              amenity.toLowerCase().includes("internet")
+                            ? "📶 "
+                            : amenity.toLowerCase().includes("tv") ||
+                                amenity.toLowerCase().includes("television")
+                              ? "📺 "
+                              : amenity
+                                    .toLowerCase()
+                                    .includes("air conditioning") ||
+                                  amenity.toLowerCase().includes("ac")
+                                ? "❄️ "
+                                : amenity.toLowerCase().includes("dining") ||
+                                    amenity.toLowerCase().includes("restaurant")
+                                  ? "🍴 "
+                                  : "✅ "}
                         {amenity}
                       </div>
                     ))}

@@ -137,38 +137,41 @@ export default function App({ onLogout, username }) {
   };
 
   // SUBMIT bulk
-  const handleSubmit = useCallback(async (e) => {
-    e?.preventDefault?.();
-    const ids = parseHotelInput(hotelIds);
-    if (!ids.length) return setError("Please enter at least one hotel ID.");
-    setError(null);
+  const handleSubmit = useCallback(
+    async (e) => {
+      e?.preventDefault?.();
+      const ids = parseHotelInput(hotelIds);
+      if (!ids.length) return setError("Please enter at least one hotel ID.");
+      setError(null);
 
-    // start UI timer and loading
-    startTimer();
-    setLoading(true);
+      // start UI timer and loading
+      startTimer();
+      setLoading(true);
 
-    try {
-      // Log what we're sending to the API
-      const requestData = {
-        supplier_code: supplier,
-        hotel_id: ids,
-      };
+      try {
+        // Log what we're sending to the API
+        const requestData = {
+          supplier_code: supplier,
+          hotel_id: ids,
+        };
 
-      console.log("Sending to API:", requestData);
+        console.log("Sending to API:", requestData);
 
-      const data = await pushHotels(supplier, ids);
+        const data = await pushHotels(supplier, ids);
 
-      // Process the API response
-      setResults(data?.results ?? data ?? []);
-    } catch (err) {
-      console.error("API Error details:", err.response || err);
-      setError(`Failed to process request: ${err.message}`);
-    } finally {
-      setLoading(false);
-      // stop timer when processing finishes
-      stopTimer();
-    }
-  });
+        // Process the API response
+        setResults(data?.results ?? data ?? []);
+      } catch (err) {
+        console.error("API Error details:", err.response || err);
+        setError(`Failed to process request: ${err.message}`);
+      } finally {
+        setLoading(false);
+        // stop timer when processing finishes
+        stopTimer();
+      }
+    },
+    [supplier, hotelIds],
+  );
 
   // Ctrl/Cmd + Enter to submit from textarea
   useEffect(() => {
@@ -231,20 +234,11 @@ export default function App({ onLogout, username }) {
     reader.onload = (ev) => {
       const text = String(ev.target.result);
       const ids = parseHotelInput(
-        text.replace(/\r/g, "\n").replace(/,+/g, ",")
+        text.replace(/\r/g, "\n").replace(/,+/g, ","),
       ).slice(0, MAX_HOTEL_IDS);
       setHotelIds(ids.join(","));
     };
     reader.readAsText(file);
-  };
-
-  // Format time for display
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
   };
 
   // helpers for UI
@@ -436,15 +430,15 @@ export default function App({ onLogout, username }) {
                 {timerRunning
                   ? formatDuration(elapsedMs)
                   : elapsedMs
-                  ? formatDuration(elapsedMs)
-                  : "00:00"}
+                    ? formatDuration(elapsedMs)
+                    : "00:00"}
               </div>
               <div className="small text-muted">
                 {timerRunning
                   ? "Push in progress..."
                   : elapsedMs
-                  ? "Last push duration"
-                  : "No push yet"}
+                    ? "Last push duration"
+                    : "No push yet"}
               </div>
             </div>
 
@@ -557,7 +551,7 @@ export default function App({ onLogout, username }) {
                       onChange={(e) => {
                         const ids = parseHotelInput(e.target.value).slice(
                           0,
-                          MAX_HOTEL_IDS
+                          MAX_HOTEL_IDS,
                         );
                         setHotelIds(ids.join(","));
                       }}
@@ -772,7 +766,7 @@ export default function App({ onLogout, username }) {
                     variant="outline-info"
                     onClick={() =>
                       setHotelIds(
-                        "754387,1000000,1,10,107998271,72131156,1816570,1688523,C13315,C14072,27184,67704,339898,439769,AIDXBANI,AKBAHMGA,17804"
+                        "754387,1000000,1,10,107998271,72131156,1816570,1688523,C13315,C14072,27184,67704,339898,439769,AIDXBANI,AKBAHMGA,17804",
                       )
                     }
                     size="sm"
@@ -1129,7 +1123,7 @@ export default function App({ onLogout, username }) {
                                         </Badge>
                                       )}
                                     </div>
-                                  )
+                                  ),
                                 )
                               ) : (
                                 <div className="text-muted">N/A</div>
@@ -1157,7 +1151,7 @@ export default function App({ onLogout, username }) {
                                         </Badge>
                                       )}
                                     </div>
-                                  )
+                                  ),
                                 )
                               ) : (
                                 <div className="text-muted">N/A</div>
@@ -1407,7 +1401,7 @@ export default function App({ onLogout, username }) {
                                       </Badge>
                                     )}
                                   </ListGroup.Item>
-                                )
+                                ),
                               )}
                             </ListGroup>
                           ) : (
@@ -1442,7 +1436,7 @@ export default function App({ onLogout, username }) {
                                       <i className="fas fa-location-dot text-primary me-2"></i>
                                       {c.name || c.code || "N/A"}
                                     </ListGroup.Item>
-                                  )
+                                  ),
                                 )}
                               </ListGroup>
                             ) : (
@@ -1505,7 +1499,7 @@ export default function App({ onLogout, username }) {
                                     <i className="fas fa-phone text-success me-2"></i>
                                     {phone}
                                   </ListGroup.Item>
-                                )
+                                ),
                               )}
                             </ListGroup>
                           ) : (
@@ -1525,7 +1519,7 @@ export default function App({ onLogout, username }) {
                                     <i className="fas fa-envelope text-primary me-2"></i>
                                     {email}
                                   </ListGroup.Item>
-                                )
+                                ),
                               )}
                             </ListGroup>
                           ) : (
@@ -1581,7 +1575,7 @@ export default function App({ onLogout, username }) {
                                       "N/A"
                                     )}
                                   </ListGroup.Item>
-                                )
+                                ),
                               )}
                             </ListGroup>
                           ) : (
@@ -1654,7 +1648,7 @@ export default function App({ onLogout, username }) {
                                   <iframe
                                     src={`https://maps.google.com/maps?q=${encodeURIComponent(
                                       hotelDetails.address?.full_address ||
-                                        hotelDetails.full_address
+                                        hotelDetails.full_address,
                                     )}&output=embed`}
                                     width="100%"
                                     height="400"
@@ -1717,7 +1711,7 @@ export default function App({ onLogout, username }) {
                                         {JSON.stringify(
                                           hotelDetails.address,
                                           null,
-                                          2
+                                          2,
                                         )}
                                       </span>
                                     ) : (
