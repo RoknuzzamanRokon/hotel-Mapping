@@ -62,6 +62,7 @@ export default function App({ onLogout, username }) {
     { id: "innstant", name: "Innstant" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
     { id: "kiwihotel", name: "kiwihotel" },
+    { id: "travelrobothotel", name: "Travel Robot Hotel" },
 
     { id: "dotw", name: "DOTW" },
     { id: "paximum", name: "Paximum" },
@@ -91,6 +92,7 @@ export default function App({ onLogout, username }) {
     { id: "innstant", name: "Innstant" },
     { id: "hyperguestdirect", name: "HyperGuest Direct" },
     { id: "kiwihotel", name: "kiwihotel" },
+    { id: "travelrobothotel", name: "Travel Robot Hotel" },
 
     { id: "rnrhotel", name: "RNR Hotel" },
   ];
