@@ -71,6 +71,7 @@ export default function App({ onLogout, username }) {
     { id: "hotelston", name: "Hotelston" },
     { id: "illusionshotel", name: "Illusions Hotel" },
     { id: "irixhotel", name: "Irix Hotel" },
+    { id: "ebookinghotel", name: "EBooking Hotel" },
     { id: "letsflyhotel", name: "LetsFly Hotel" },
     { id: "rakuten", name: "Rakuten" },
     { id: "roomerang", name: "RoomeRang" },
