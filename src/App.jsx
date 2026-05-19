@@ -50,7 +50,6 @@ export default function App({ onLogout, username }) {
 
   const supplierOptions = [
     { id: "ratehawkhotel", name: "RateHawk Hotel" },
-    { id: "ratehawk_new", name: "RateHawk New" },
     { id: "hotelbeds", name: "Hotelbeds" },
     { id: "agoda", name: "Agoda" },
     { id: "tbohotel", name: "TBO Hotels" },
@@ -81,7 +80,7 @@ export default function App({ onLogout, username }) {
   ];
 
   const supplierOptionsCollectData = [
-    { id: "ratehawk_new", name: "RateHawk New" },
+    { id: "ratehawkhotel", name: "RateHawk Hotel" },
     { id: "hotelbeds", name: "Hotelbeds" },
     { id: "agoda", name: "Agoda" },
     { id: "tbohotel", name: "TBO Hotels" },
