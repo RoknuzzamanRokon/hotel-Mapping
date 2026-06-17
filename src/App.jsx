@@ -74,6 +74,7 @@ export default function App({ onLogout, username }) {
     { id: "rakuten", name: "Rakuten" },
     { id: "roomerang", name: "RoomeRang" },
     { id: "stuba", name: "Stuba" },
+    { id: "mgholiday", name: "MGHoliday" },
 
     { id: "rnrhotel", name: "RNR Hotel" },
     // { id: "amadeushotel", name: "Amadeus Hotel" },
@@ -94,6 +95,7 @@ export default function App({ onLogout, username }) {
     { id: "kiwihotel", name: "kiwihotel" },
     { id: "travelrobothotel", name: "Travel Robot Hotel" },
     { id: "didahotel", name: "Dida Hotel" },
+    { id: "mgholiday", name: "MGHoliday" },
 
     { id: "rnrhotel", name: "RNR Hotel" },
   ];
