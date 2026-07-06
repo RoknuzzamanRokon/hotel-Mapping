@@ -102,9 +102,9 @@ export default function App({ onLogout, username }) {
 
   const parseHotelInput = (text) =>
     (text || "")
-      .split(/[,]+/)
-      .map((s) => s.trim())
-      .filter(Boolean);
+      .split(/[\s,]+/)          // split on commas, spaces, newlines
+      .map((s) => s.replace(/^["']+|["']+$/g, "").trim()) // strip surrounding quotes
+      .filter((s) => /\d+/.test(s)); // keep only tokens that contain digits
 
   // format ms to HH:MM:SS or MM:SS
   const formatDuration = (ms) => {
@@ -950,11 +950,10 @@ export default function App({ onLogout, username }) {
                                   {Array.from({ length: 5 }).map((_, i) => (
                                     <i
                                       key={i}
-                                      className={`fas fa-star${
-                                        i < parseInt(hotelDetails.star_rating)
+                                      className={`fas fa-star${i < parseInt(hotelDetails.star_rating)
                                           ? " text-warning"
                                           : " text-muted"
-                                      }`}
+                                        }`}
                                     ></i>
                                   ))}
                                   <span className="ms-2 small text-muted">
@@ -1613,58 +1612,58 @@ export default function App({ onLogout, username }) {
                         <Card.Body>
                           {(hotelDetails.address?.full_address ||
                             hotelDetails.full_address) && (
-                            <div className="mb-3">
-                              <div className="fw-medium mb-2">
-                                <i className="fas fa-map-marker-alt me-2 text-primary"></i>
-                                Full Address:
+                              <div className="mb-3">
+                                <div className="fw-medium mb-2">
+                                  <i className="fas fa-map-marker-alt me-2 text-primary"></i>
+                                  Full Address:
+                                </div>
+                                <p className="text-muted mb-0">
+                                  {hotelDetails.address?.full_address ||
+                                    hotelDetails.full_address}
+                                </p>
                               </div>
-                              <p className="text-muted mb-0">
-                                {hotelDetails.address?.full_address ||
-                                  hotelDetails.full_address}
-                              </p>
-                            </div>
-                          )}
+                            )}
 
                           {hotelDetails.address?.google_map_site_link ||
-                          hotelDetails.google_map_site_link ||
-                          hotelDetails.address?.full_address ||
-                          hotelDetails.full_address ? (
+                            hotelDetails.google_map_site_link ||
+                            hotelDetails.address?.full_address ||
+                            hotelDetails.full_address ? (
                             <div className="text-center">
                               {(hotelDetails.address?.google_map_site_link ||
                                 hotelDetails.google_map_site_link) && (
-                                <a
-                                  href={
-                                    hotelDetails.address
-                                      ?.google_map_site_link ||
-                                    hotelDetails.google_map_site_link
-                                  }
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="btn btn-primary btn-lg mb-3"
-                                >
-                                  <i className="fas fa-external-link-alt me-2"></i>
-                                  View on Google Maps
-                                </a>
-                              )}
+                                  <a
+                                    href={
+                                      hotelDetails.address
+                                        ?.google_map_site_link ||
+                                      hotelDetails.google_map_site_link
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-primary btn-lg mb-3"
+                                  >
+                                    <i className="fas fa-external-link-alt me-2"></i>
+                                    View on Google Maps
+                                  </a>
+                                )}
 
                               {(hotelDetails.address?.full_address ||
                                 hotelDetails.full_address) && (
-                                <div className="mt-3">
-                                  <iframe
-                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(
-                                      hotelDetails.address?.full_address ||
+                                  <div className="mt-3">
+                                    <iframe
+                                      src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                                        hotelDetails.address?.full_address ||
                                         hotelDetails.full_address,
-                                    )}&output=embed`}
-                                    width="100%"
-                                    height="400"
-                                    style={{ border: 0, borderRadius: "8px" }}
-                                    allowFullScreen=""
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    title="Hotel Location Map"
-                                  ></iframe>
-                                </div>
-                              )}
+                                      )}&output=embed`}
+                                      width="100%"
+                                      height="400"
+                                      style={{ border: 0, borderRadius: "8px" }}
+                                      allowFullScreen=""
+                                      loading="lazy"
+                                      referrerPolicy="no-referrer-when-downgrade"
+                                      title="Hotel Location Map"
+                                    ></iframe>
+                                  </div>
+                                )}
                             </div>
                           ) : (
                             <div className="text-center text-muted py-4">
