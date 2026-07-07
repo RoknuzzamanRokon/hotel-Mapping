@@ -102,11 +102,11 @@ export default function App({ onLogout, username }) {
 
   const parseHotelInput = (text) =>
     (text || "")
-      .split(/[\n\r,]+/)                          // split on newlines and commas
-      .map((s) => s.replace(/^["'\s]+|["'\s]+$/g, "")) // strip surrounding quotes and whitespace
-      .flatMap((s) => s.split(/\s+/))             // also split remaining whitespace within tokens
-      .map((s) => s.replace(/^["']+|["']+$/g, "")) // strip any remaining quotes after inner split
-      .filter((s) => /^[\w-]+$/.test(s));         // keep valid ID tokens (letters, digits, _ , -)
+      .split(/[\n\r,]+/)                                    // split on newlines and commas
+      .map((s) => s.replace(/^["'\s]+|["'\s]+$/g, ""))     // strip surrounding quotes and whitespace
+      .flatMap((s) => s.split(/\s+/))                      // split remaining whitespace within tokens
+      .map((s) => s.replace(/^[^a-zA-Z0-9_-]+|[^a-zA-Z0-9_-]+$/g, "")) // strip leading/trailing punctuation like { } ( )
+      .filter((s) => s.length > 0);                        // drop empty tokens
 
   // format ms to HH:MM:SS or MM:SS
   const formatDuration = (ms) => {
@@ -953,8 +953,8 @@ export default function App({ onLogout, username }) {
                                     <i
                                       key={i}
                                       className={`fas fa-star${i < parseInt(hotelDetails.star_rating)
-                                          ? " text-warning"
-                                          : " text-muted"
+                                        ? " text-warning"
+                                        : " text-muted"
                                         }`}
                                     ></i>
                                   ))}
