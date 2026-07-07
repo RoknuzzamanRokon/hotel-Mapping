@@ -102,9 +102,11 @@ export default function App({ onLogout, username }) {
 
   const parseHotelInput = (text) =>
     (text || "")
-      .split(/[\s,]+/)          // split on commas, spaces, newlines
-      .map((s) => s.replace(/^["']+|["']+$/g, "").trim()) // strip surrounding quotes
-      .filter((s) => /\d+/.test(s)); // keep only tokens that contain digits
+      .split(/[\n\r,]+/)                          // split on newlines and commas
+      .map((s) => s.replace(/^["'\s]+|["'\s]+$/g, "")) // strip surrounding quotes and whitespace
+      .flatMap((s) => s.split(/\s+/))             // also split remaining whitespace within tokens
+      .map((s) => s.replace(/^["']+|["']+$/g, "")) // strip any remaining quotes after inner split
+      .filter((s) => /^[\w-]+$/.test(s));         // keep valid ID tokens (letters, digits, _ , -)
 
   // format ms to HH:MM:SS or MM:SS
   const formatDuration = (ms) => {
