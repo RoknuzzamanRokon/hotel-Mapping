@@ -98,6 +98,10 @@ export default function App({ onLogout, username }) {
     { id: "mgholiday", name: "MGHoliday" },
 
     { id: "rnrhotel", name: "RNR Hotel" },
+    { id: "hotelston", name: "Hotelston" },
+    // { id: "illusionshotel", name: "Illusions Hotel" },
+    // { id: "letsflyhotel", name: "LetsFly Hotel" },
+    // { id: "roomerang", name: "RoomeRang" },
   ];
 
   const parseHotelInput = (text) =>
