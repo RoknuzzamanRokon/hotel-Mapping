@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { Row, Col, Card, Button, Modal, Badge } from "react-bootstrap";
 
+const noRoomFoundImage =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420' viewBox='0 0 640 420'%3E%3Crect width='640' height='420' fill='%23f1f5f9'/%3E%3Cpath d='M112 252h416v80H112zM152 188h128v64H152zM320 188h168v64H320z' fill='%23cbd5e1'/%3E%3Cpath d='M112 332h416v28H112z' fill='%2394a3b8'/%3E%3Ctext x='320' y='126' text-anchor='middle' font-family='Arial, sans-serif' font-size='28' fill='%23475569'%3ENo room photo%3C/text%3E%3C/svg%3E";
+
+const handleImageFallback = (e) => {
+  if (e.currentTarget.src !== noRoomFoundImage) {
+    e.currentTarget.src = noRoomFoundImage;
+  }
+};
+
 function RoomTypesTab({ roomTypes }) {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const noRoomFoundImage =
-    "https://hoteljson.innsightmap.com/test1/no_room_picture_found.png";
 
   const handleSelectRoom = (room) => {
     setSelectedRoom(room);
@@ -67,10 +74,7 @@ function RoomTypesTab({ roomTypes }) {
                           height: "100%",
                           objectFit: "cover",
                         }}
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = noRoomFoundImage;
-                        }}
+                        onError={handleImageFallback}
                       />
                       <Badge
                         bg="primary"
@@ -167,10 +171,7 @@ function RoomTypesTab({ roomTypes }) {
                             height: "100%",
                             objectFit: "cover",
                           }}
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = noRoomFoundImage;
-                          }}
+                          onError={handleImageFallback}
                         />
                         {selectedRoom.additional_images.length > 1 && (
                           <>
@@ -228,10 +229,7 @@ function RoomTypesTab({ roomTypes }) {
                           height: "100%",
                           objectFit: "cover",
                         }}
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = noRoomFoundImage;
-                        }}
+                        onError={handleImageFallback}
                       />
                     )}
                   </div>
