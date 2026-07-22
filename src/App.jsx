@@ -320,11 +320,12 @@ export default function App({ onLogout, username }) {
 
                 <Row className="g-2 align-items-end">
                   <Col md={4}>
-                    <Form.Group>
+                    <Form.Group controlId="checkSupplier">
                       <Form.Label className="small fw-semibold">
                         Supplier
                       </Form.Label>
                       <Form.Select
+                        name="checkSupplier"
                         value={checkSupplier}
                         onChange={(e) => setCheckSupplier(e.target.value)}
                         size="sm"
@@ -339,11 +340,12 @@ export default function App({ onLogout, username }) {
                   </Col>
 
                   <Col md={4}>
-                    <Form.Group>
+                    <Form.Group controlId="checkHotelId">
                       <Form.Label className="small fw-semibold">
                         Hotel ID
                       </Form.Label>
                       <Form.Control
+                        name="checkHotelId"
                         placeholder="Enter hotel ID"
                         value={checkHotelId}
                         onChange={(e) => setCheckHotelId(e.target.value)}
@@ -471,11 +473,12 @@ export default function App({ onLogout, username }) {
                 <Form onSubmit={handleSubmit}>
                   <Row className="g-3 mb-3">
                     <Col md={6}>
-                      <Form.Group>
+                      <Form.Group controlId="bulkSupplier">
                         <Form.Label className="small fw-semibold">
                           Supplier
                         </Form.Label>
                         <Form.Select
+                          name="bulkSupplier"
                           value={supplier}
                           onChange={(e) => setSupplier(e.target.value)}
                           size="sm"
@@ -533,7 +536,7 @@ export default function App({ onLogout, username }) {
                     </Col>
                   </Row>
 
-                  <Form.Group className="mb-3">
+                  <Form.Group className="mb-3" controlId="bulkHotelIds">
                     <Form.Label className="small fw-semibold">
                       Hotel IDs (comma or newline separated)
                       <Button
@@ -549,6 +552,8 @@ export default function App({ onLogout, username }) {
                       <input
                         type="file"
                         id="fileUpload"
+                        name="fileUpload"
+                        aria-label="Upload hotel IDs file"
                         style={{ display: "none" }}
                         onChange={handleFileUpload}
                         accept=".csv,.txt"
@@ -558,6 +563,7 @@ export default function App({ onLogout, username }) {
                       as="textarea"
                       rows={6}
                       ref={textRef}
+                      name="bulkHotelIds"
                       value={hotelIds}
                       onChange={(e) => {
                         const ids = parseHotelInput(e.target.value).slice(
@@ -916,7 +922,19 @@ export default function App({ onLogout, username }) {
                               height: "250px",
                               objectFit: "cover",
                             }}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.style.display = "none";
+                              const placeholder = e.currentTarget.nextSibling;
+                              if (placeholder) placeholder.style.display = "flex";
+                            }}
                           />
+                          <div
+                            className="rounded shadow-sm d-none align-items-center justify-content-center bg-light text-muted"
+                            style={{ width: "100%", height: "250px" }}
+                          >
+                            <span><i className="fas fa-image me-2"></i>Image unavailable</span>
+                          </div>
                         </div>
                       )}
 
@@ -1244,10 +1262,17 @@ export default function App({ onLogout, username }) {
                                 }}
                                 onError={(e) => {
                                   e.currentTarget.onerror = null;
-                                  e.currentTarget.src =
-                                    "https://hoteljson.innsightmap.com/test1/no_room_found.png";
+                                  e.currentTarget.style.display = "none";
+                                  const placeholder = e.currentTarget.nextSibling;
+                                  if (placeholder) placeholder.style.display = "flex";
                                 }}
                               />
+                              <div
+                                className="d-none align-items-center justify-content-center bg-light text-muted"
+                                style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
+                              >
+                                <span><i className="fas fa-image me-2"></i>Unavailable</span>
+                              </div>
                               {p.title && (
                                 <div
                                   className="position-absolute bottom-0 start-0 end-0 p-2 text-white"
