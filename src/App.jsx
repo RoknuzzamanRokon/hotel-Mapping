@@ -917,6 +917,7 @@ export default function App({ onLogout, username }) {
                             src={hotelDetails.primary_photo}
                             alt="Hotel"
                             className="img-fluid rounded shadow-sm"
+                            referrerPolicy="no-referrer"
                             style={{
                               width: "100%",
                               height: "250px",
@@ -1255,6 +1256,7 @@ export default function App({ onLogout, username }) {
                                 src={p.url}
                                 alt={p.title || `photo-${i}`}
                                 className="img-fluid"
+                                referrerPolicy="no-referrer"
                                 style={{
                                   width: "100%",
                                   height: "100%",
